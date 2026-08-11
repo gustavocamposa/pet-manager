@@ -1,0 +1,25 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "João",
+      "email": "joao@email.com",
+      "password": "HASH_DA_SENHA",
+      "phone": "11999999999",
+      "address": "Rua Exemplo, 123"
+    }
+  ],
+  "pets": [
+    {
+      "id": "1",
+      "name": "Thor",
+      "species": "Cachorro",
+      "breed": "Golden Retriever",
+      "age": 4,
+      "weight": 32.5,
+      "sex": "Macho",
+      "notes": "Muito brincalhão",
+      "userId": "1"
+    }
+  ]
+}
