@@ -1,38 +1,30 @@
-const fs = require("fs");
+import fs, { write } from "fs";
+import { readDataBase, writeDataBase } from "../database.js";
+import { error } from "console";
 
-function getUsers(req, res) {
-  fs.readFile("db.json", "utf-8", (err, data) => {
-    if (err) {
-      console.error("Erro ao ler o arquivo:", err);
-      return;
-    }
+async function getUsers(req, res) {
+  const db = await readDataBase();
 
-    const db = JSON.parse(data);
-
-    res.json(db.users);
-  });
+  res.json(db.users);
 }
-function getUsersById(req, res) {
-  fs.readFile("db.json", "utf-8", (err, data) => {
-    if (err) {
-      console.error("Erro ao ler o arquivo:", err);
-      return;
-    }
 
-    const db = JSON.parse(data);
+async function getUsersById(req, res) {
+  const db = await readDataBase();
 
-    const usuario = db.users.find((usuario) => {
-      return usuario.id == req.params.id;
-    });
-
-    if (!usuario) {
-      return res.status(404).json({ error: "Usuário não encontrado" });
-    }
-
-    return res.json(usuario);
+  const usuario = db.users.find((usuario) => {
+    return usuario.id == req.params.id;
   });
+
+  if (!usuario) {
+    return res.status(404).json({ error: "Usuário não encontrado" });
+  }
+
+  return res.json(usuario);
 }
-function addUsers(req, res) {
+
+async function addUsers(req, res) {
+  const db = await readDataBase();
+
   const { name, email, password, phone, address } = req.body;
 
   const usuario = {
@@ -44,34 +36,59 @@ function addUsers(req, res) {
     address,
   };
 
-  fs.readFile("db.json", "utf-8", (err, data) => {
-    if (err) {
-      console.error("Erro ao ler o arquivo:", err);
-      return res.status(500).json({ error: "Erro ao ler o banco de dados" });
-    }
+  db.users.push(usuario);
 
-    const db = JSON.parse(data);
+  await writeDataBase();
 
-    db.users.push(usuario);
-
-    fs.writeFile("db.json", JSON.stringify(db, null, 2), "utf-8", (err) => {
-      if (err) {
-        console.error("Erro ao salvar o arquivo:", err);
-        return res.status(500).json({ error: "Erro ao salvar usuário" });
-      }
-
-      return res.status(201).json(usuario);
-    });
-  });
+  return res.status(201).json(usuario);
 }
-function updateUser(req, res) {
+
+async function updateUser(req, res) {
+  const db = await readDataBase();
   const id = req.params.id;
+
+  const user = db.users.find((user) => {
+    return user.id == id;
+  });
+
+  if (!user) {
+    return res.status(404).json({ error: "Usuário não encontrado" });
+  }
+
   const data = req.body;
-  const db = JSON.parse(data);
+
+  const userAtt = {
+    ...user,
+    ...data,
+  };
+
+  const index = db.users.findIndex((user) => user.id == id);
+
+  db.users[index] = userAtt;
+
+  await writeDataBase();
+
+  return res.status(200).json(userAtt);
+}
+
+async function deleteUser(req, res) {
+  const db = await readDataBase();
+  const id = req.params.id;
 
   const user = db.users.find((user) => {
     return user.id == req.params.id;
   });
-}
+  if (!user) {
+    return res.status(404).json({ error: "Usuário não encontrado." });
+  }
 
-module.exports = { getUsers, getUsersById, addUsers };
+  const delUser = db.users.filter((user) => {
+    return user.id !== id;
+  });
+  db.users = delUser;
+
+  await writeDataBase();
+
+  return res.status(200).json(delUser);
+}
+export { getUsers, getUsersById, addUsers, updateUser, deleteUser };

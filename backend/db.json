@@ -7,6 +7,14 @@
       "password": "HASH_DA_SENHA",
       "phone": "11999999999",
       "address": "Rua Exemplo, 123"
+    },
+    {
+      "id": "1786537134771",
+      "name": "Gustavo",
+      "email": "maria@email.com",
+      "password": "123456",
+      "phone": "11988888888",
+      "address": "Rua A, 123"
     }
   ],
   "pets": [
