@@ -92,3 +92,5 @@ async function deletePet(req, res) {
 
   return res.status(200).json(delPet);
 }
+
+export { getPet, getPetById, addPet, updatePet, deletePet };
