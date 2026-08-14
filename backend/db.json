@@ -15,6 +15,14 @@
       "password": "123456",
       "phone": "11988888888",
       "address": "Rua A, 123"
+    },
+    {
+      "id": "1786721044322",
+      "name": "Mardsaia",
+      "email": "mario@email.com",
+      "password": "$2b$10$slLD2L36gBaIauyv/YcDUOVCIaMNSgZb2jbvyd7Y3cA3UQPwxwpWe",
+      "phone": "11988888888",
+      "address": "Rua A, 123"
     }
   ],
   "pets": [
