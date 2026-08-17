@@ -2,15 +2,17 @@ import { readDataBase, writeDataBase } from "../database.js";
 
 async function getPet(req, res) {
   const db = await readDataBase();
-
-  res.json(db.pets);
+  const pets = db.pets.filter((pet) => {
+    return pet.userId === req.user.id;
+  });
+  return res.json(pets);
 }
 
 async function getPetById(req, res) {
   const db = await readDataBase();
 
   const pet = db.pets.find((pet) => {
-    return pet.id == req.params.id;
+    return pet.id == req.params.id && pet.userId === req.user.id;
   });
 
   if (!pet) {
@@ -23,7 +25,7 @@ async function getPetById(req, res) {
 async function addPet(req, res) {
   const db = await readDataBase();
 
-  const { name, species, breed, age, weight, sex, notes, userId } = req.body;
+  const { name, species, breed, age, weight, sex, notes } = req.body;
 
   const pet = {
     id: Date.now().toString(),
@@ -34,7 +36,7 @@ async function addPet(req, res) {
     weight,
     sex,
     notes,
-    userId,
+    userId: req.user.id,
   };
 
   db.pets.push(pet);
@@ -49,18 +51,25 @@ async function updatePet(req, res) {
   const id = req.params.id;
 
   const pet = db.pets.find((pet) => {
-    return pet.id == id;
+    return pet.id == id && pet.userId === req.user.id;
   });
 
   if (!pet) {
     return res.status(404).json({ error: "Pet não encontrado" });
   }
 
-  const data = req.body;
+  const { name, species, breed, age, weight, sex, notes } = req.body;
 
   const petAtt = {
-    ...pet,
-    ...data,
+    id: pet.id,
+    userId: pet.userId,
+    name,
+    species,
+    breed,
+    age,
+    weight,
+    sex,
+    notes,
   };
 
   const index = db.pets.findIndex((pet) => pet.id == id);
@@ -77,7 +86,7 @@ async function deletePet(req, res) {
   const id = req.params.id;
 
   const pet = db.pets.find((pet) => {
-    return pet.id == req.params.id;
+    return pet.id == req.params.id && pet.userId === req.user.id;
   });
   if (!pet) {
     return res.status(404).json({ error: "Pet não encontrado." });

@@ -6,17 +6,20 @@ import {
   updatePet,
   deletePet,
 } from "../controllers/petController.js";
+import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/", addPet);
+router.post("/", authMiddleware, addPet);
 
-router.get("/", getPet);
+router.get("/", authMiddleware, getPet);
 
-router.get("/:id", getPetById);
+router.get("/:id", authMiddleware, getPetById);
 
-router.put("/:id", updatePet);
+router.get("/", authMiddleware, getPet);
 
-router.delete("/:id", deletePet);
+router.put("/:id", authMiddleware, updatePet);
+
+router.delete("/:id", authMiddleware, deletePet);
 
 export default router;
