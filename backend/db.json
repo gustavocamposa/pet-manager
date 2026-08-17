@@ -36,6 +36,28 @@
       "sex": "Macho",
       "notes": "Muito brincalhão",
       "userId": "1"
+    },
+    {
+      "id": "1786988958430",
+      "name": "Rex",
+      "species": "Cachorro",
+      "breed": "Labrador",
+      "age": 5,
+      "weight": 28.5,
+      "sex": "Macho",
+      "notes": "Muito brincalhão",
+      "userId": "1786721044322"
+    },
+    {
+      "id": "1786989147111",
+      "name": "Rex",
+      "species": "Cachorro",
+      "breed": "Labrador",
+      "age": 5,
+      "weight": 28.5,
+      "sex": "Macho",
+      "notes": "Muito brincalhão",
+      "userId": "1786721044322"
     }
   ]
 }

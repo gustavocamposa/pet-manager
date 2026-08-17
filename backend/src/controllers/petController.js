@@ -22,28 +22,51 @@ async function getPetById(req, res) {
   return res.json(pet);
 }
 
-async function addPet(req, res) {
-  const db = await readDataBase();
+async function addPet(req, res, next) {
+  try {
+    const db = await readDataBase();
 
-  const { name, species, breed, age, weight, sex, notes } = req.body;
+    const { name, species, breed, age, weight, sex, notes } = req.body;
 
-  const pet = {
-    id: Date.now().toString(),
-    name,
-    species,
-    breed,
-    age,
-    weight,
-    sex,
-    notes,
-    userId: req.user.id,
-  };
+    const pet = {
+      id: Date.now().toString(),
+      name,
+      species,
+      breed,
+      age,
+      weight,
+      sex,
+      notes,
+      userId: req.user.id,
+    };
 
-  db.pets.push(pet);
+    const regex = /^[\p{L}\s]+$/u;
 
-  await writeDataBase();
+    if (!name || !name.trim() || !regex.test(name)) {
+      return res.status(400).json({ error: "Nome não encontrado." });
+    }
+    if (!species || !species.trim() || !regex.test(species)) {
+      return res.status(400).json({ error: "Espécie não encontrada." });
+    }
+    if (!Number.isInteger(age) || age < 0) {
+      return res.status(400).json({
+        error: "Idade inválida.",
+      });
+    }
+    if (typeof weight !== "number" || weight <= 0) {
+      return res.status(400).json({
+        error: "Peso inválido.",
+      });
+    }
 
-  return res.status(201).json(pet);
+    db.pets.push(pet);
+
+    await writeDataBase();
+
+    return res.status(201).json(pet);
+  } catch (error) {
+    next(error);
+  }
 }
 
 async function updatePet(req, res) {
