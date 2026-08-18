@@ -71,21 +71,47 @@ async function addPet(req, res, next) {
 
 async function updatePet(req, res) {
   const db = await readDataBase();
+
   const id = req.params.id;
 
   const pet = db.pets.find((pet) => {
-    return pet.id == id && pet.userId === req.user.id;
+    return pet.id === id;
   });
 
   if (!pet) {
-    return res.status(404).json({ error: "Pet não encontrado" });
+    throw new AppError("Pet not found", 404);
+  }
+
+  if (pet.userId !== req.user.id) {
+    throw new AppError("You do not have permission to update this pet", 403);
   }
 
   const { name, species, breed, age, weight, sex, notes } = req.body;
 
-  const petAtt = {
+  const regex = /^[\p{L}\s]+$/u;
+
+  if (!name || !name.trim() || !regex.test(name)) {
+    throw new AppError("Invalid name", 400);
+  }
+
+  if (!species || !species.trim() || !regex.test(species)) {
+    throw new AppError("Invalid species", 400);
+  }
+
+  if (!Number.isInteger(age) || age < 0) {
+    throw new AppError("Invalid age", 400);
+  }
+
+  if (typeof weight !== "number" || weight <= 0) {
+    throw new AppError("Invalid weight", 400);
+  }
+
+  if (!sex || !sex.trim() || !regex.test(sex)) {
+    throw new AppError("Invalid sex", 400);
+  }
+
+  const petUpdated = {
     id: pet.id,
-    userId: pet.userId,
     name,
     species,
     breed,
@@ -93,15 +119,18 @@ async function updatePet(req, res) {
     weight,
     sex,
     notes,
+    userId: pet.userId,
   };
 
-  const index = db.pets.findIndex((pet) => pet.id == id);
+  const index = db.pets.findIndex((pet) => {
+    return pet.id === id;
+  });
 
-  db.pets[index] = petAtt;
+  db.pets[index] = petUpdated;
 
   await writeDataBase();
 
-  return res.status(200).json(petAtt);
+  return res.status(200).json(petUpdated);
 }
 
 async function deletePet(req, res) {

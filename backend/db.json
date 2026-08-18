@@ -9,17 +9,5 @@
       "address": "Rua A, 123"
     }
   ],
-  "pets": [
-    {
-      "id": "1787061443899",
-      "name": "Thor",
-      "species": "Cachorro",
-      "breed": "Golden Retriever",
-      "age": 4,
-      "weight": 32.5,
-      "sex": "Macho",
-      "notes": "Muito brincalhão",
-      "userId": "1787061023232"
-    }
-  ]
+  "pets": []
 }
