@@ -3,8 +3,10 @@ import userRoutes from "./routes/userRoutes.js";
 import petRoutes from "./routes/petRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import { errorMiddleware } from "./middleware/errorMiddleware.js";
-const app = express();
+import cors from "cors";
 
+const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.use("/users", userRoutes);
