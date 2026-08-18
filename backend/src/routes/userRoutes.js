@@ -2,21 +2,23 @@ import express from "express";
 import {
   getUsers,
   getUsersById,
-  addUsers,
+  addUser,
   updateUser,
   deleteUser,
 } from "../controllers/userController.js";
 
+import { authMiddleware } from "../middleware/authMiddleware.js";
+import { asyncHandler } from "../middleware/asyncHandler.js";
+
 const router = express.Router();
 
-router.post("/", addUsers);
+router.post("/", asyncHandler(addUser));
 
 router.get("/", getUsers);
 
-router.get("/:id", getUsersById);
+router.get("/:id", authMiddleware, asyncHandler(getUsersById));
 
 router.put("/:id", updateUser);
 
-router.delete("/:id", deleteUser);
-
+router.delete("/:id", authMiddleware, asyncHandler(deleteUser));
 export default router;

@@ -7,19 +7,20 @@ import {
   deletePet,
 } from "../controllers/petController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
+import { asyncHandler } from "../middleware/asyncHandler.js";
 
 const router = express.Router();
 
-router.post("/", authMiddleware, addPet);
+router.post("/", authMiddleware, asyncHandler(addPet));
 
-router.get("/", authMiddleware, getPet);
+router.get("/", authMiddleware, asyncHandler(getPet));
 
-router.get("/:id", authMiddleware, getPetById);
+router.get("/:id", authMiddleware, asyncHandler(getPetById));
 
-router.get("/", authMiddleware, getPet);
+router.get("/", authMiddleware, asyncHandler(getPet));
 
-router.put("/:id", authMiddleware, updatePet);
+router.put("/:id", authMiddleware, asyncHandler(updatePet));
 
-router.delete("/:id", authMiddleware, deletePet);
+router.delete("/:id", authMiddleware, asyncHandler(deletePet));
 
 export default router;

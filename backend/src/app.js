@@ -2,7 +2,7 @@ import express from "express";
 import userRoutes from "./routes/userRoutes.js";
 import petRoutes from "./routes/petRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
-import { errorMiddleware } from "./middlewares/errorMiddleware.js";
+import { errorMiddleware } from "./middleware/errorMiddleware.js";
 const app = express();
 
 app.use(express.json());

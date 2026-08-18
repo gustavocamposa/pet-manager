@@ -5,4 +5,5 @@ function errorMiddleware(error, req, res, next) {
     error: error.message,
   });
 }
+
 export { errorMiddleware };

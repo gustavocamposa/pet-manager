@@ -1,33 +1,17 @@
 {
   "users": [
     {
-      "id": "1",
-      "name": "João",
-      "email": "joao@email.com",
-      "password": "HASH_DA_SENHA",
-      "phone": "11999999999",
-      "address": "Rua Exemplo, 123"
-    },
-    {
-      "id": "1786537134771",
+      "id": "1787061023232",
       "name": "Gustavo",
-      "email": "maria@email.com",
-      "password": "123456",
-      "phone": "11988888888",
-      "address": "Rua A, 123"
-    },
-    {
-      "id": "1786721044322",
-      "name": "Mardsaia",
-      "email": "mario@email.com",
-      "password": "$2b$10$slLD2L36gBaIauyv/YcDUOVCIaMNSgZb2jbvyd7Y3cA3UQPwxwpWe",
+      "email": "gustavo@email.com",
+      "password": "$2b$10$UBmcnO42uzVgBdEKEkyUBuDWpXAcrTZ3Q9/6/3yOYeWyy7G.QUaoi",
       "phone": "11988888888",
       "address": "Rua A, 123"
     }
   ],
   "pets": [
     {
-      "id": "1",
+      "id": "1787061443899",
       "name": "Thor",
       "species": "Cachorro",
       "breed": "Golden Retriever",
@@ -35,29 +19,7 @@
       "weight": 32.5,
       "sex": "Macho",
       "notes": "Muito brincalhão",
-      "userId": "1"
-    },
-    {
-      "id": "1786988958430",
-      "name": "Rex",
-      "species": "Cachorro",
-      "breed": "Labrador",
-      "age": 5,
-      "weight": 28.5,
-      "sex": "Macho",
-      "notes": "Muito brincalhão",
-      "userId": "1786721044322"
-    },
-    {
-      "id": "1786989147111",
-      "name": "Rex",
-      "species": "Cachorro",
-      "breed": "Labrador",
-      "age": 5,
-      "weight": 28.5,
-      "sex": "Macho",
-      "notes": "Muito brincalhão",
-      "userId": "1786721044322"
+      "userId": "1787061023232"
     }
   ]
 }
