@@ -63,7 +63,7 @@ async function addUser(req, res) {
 
   db.users.push(user);
 
-  await writeDataBase();
+  await writeDataBase(db);
 
   return res.status(201).json(user);
 }

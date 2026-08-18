@@ -4,15 +4,9 @@ import { AppError } from "../errors/AppError.js";
 async function getPet(req, res) {
   const db = await readDataBase();
 
-  console.log("REQ.USER:", req.user);
-  console.log("REQ.USER.ID:", req.user.id);
-  console.log("PET.USER.ID:", db.pets[0]?.userId);
-
   const pets = db.pets.filter((pet) => {
     return pet.userId === req.user.id;
   });
-
-  console.log("PETS FILTRADOS:", pets);
 
   return res.json(pets);
 }
@@ -64,7 +58,7 @@ async function addPet(req, res, next) {
 
   db.pets.push(pet);
 
-  await writeDataBase();
+  await writeDataBase(db);
 
   return res.status(201).json(pet);
 }

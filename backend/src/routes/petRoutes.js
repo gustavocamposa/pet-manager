@@ -1,4 +1,5 @@
 import express from "express";
+
 import {
   getPet,
   getPetById,
@@ -6,6 +7,7 @@ import {
   updatePet,
   deletePet,
 } from "../controllers/petController.js";
+
 import { authMiddleware } from "../middleware/authMiddleware.js";
 import { asyncHandler } from "../middleware/asyncHandler.js";
 
@@ -16,8 +18,6 @@ router.post("/", authMiddleware, asyncHandler(addPet));
 router.get("/", authMiddleware, asyncHandler(getPet));
 
 router.get("/:id", authMiddleware, asyncHandler(getPetById));
-
-router.get("/", authMiddleware, asyncHandler(getPet));
 
 router.put("/:id", authMiddleware, asyncHandler(updatePet));
 

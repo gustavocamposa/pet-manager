@@ -14,7 +14,9 @@ async function readDataBase() {
   return low.data;
 }
 
-async function writeDataBase() {
+async function writeDataBase(data) {
+  low.data = data;
+
   await low.write();
 }
 
