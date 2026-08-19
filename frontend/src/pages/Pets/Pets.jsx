@@ -29,13 +29,19 @@ export default function Pets() {
 
   const [editingPet, setEditingPet] = useState(null);
 
+  const [error, setError] = useState("");
+
   useEffect(() => {
     async function search() {
-      const result = await getPets();
+      try {
+        const result = await getPets();
 
-      setPets(result);
+        setPets(result);
+      } catch (error) {
+        console.error(error);
+        setError("Não foi possível carregar os pets.");
+      }
     }
-
     search();
   }, []);
 
