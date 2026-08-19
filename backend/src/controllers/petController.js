@@ -129,6 +129,7 @@ async function updatePet(req, res) {
 
 async function deletePet(req, res) {
   const db = await readDataBase();
+
   const id = req.params.id;
 
   const pet = db.pets.find((pet) => {

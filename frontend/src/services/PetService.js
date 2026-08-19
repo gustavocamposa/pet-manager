@@ -49,3 +49,19 @@ export async function updatePet(id, pet) {
 
   return data;
 }
+
+export async function deletePet(id) {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  });
+
+  const data = await response.json();
+
+  return data;
+}

@@ -4,7 +4,12 @@ import PetForm from "./PetForm";
 import PetFilters from "./PetFilters";
 import PetList from "./PetList";
 
-import { getPets, addPet, updatePet } from "../../services/petService";
+import {
+  getPets,
+  addPet,
+  updatePet,
+  deletePet,
+} from "../../services/petService";
 
 export default function Pets() {
   const [pets, setPets] = useState([]);
@@ -34,8 +39,6 @@ export default function Pets() {
     search();
   }, []);
 
-  // Quando selecionar um pet para editar,
-  // preenche o formulário com os dados dele
   useEffect(() => {
     if (editingPet) {
       setName(editingPet.name);
@@ -69,6 +72,14 @@ export default function Pets() {
     setEditingPet(pet);
   }
 
+  async function handleDeletePet(pet) {
+    const data = await deletePet(pet.id);
+
+    console.log(data);
+
+    setPets((pets) => pets.filter((item) => item.id !== pet.id));
+  }
+
   async function handleAddPet(event) {
     event.preventDefault();
 
@@ -82,16 +93,19 @@ export default function Pets() {
         sex,
         notes,
       });
+
       setPets((pets) =>
         pets.map((pet) => {
           if (pet.id === editingPet.id) {
             return data;
           }
+
           return pet;
         }),
       );
 
       console.log(data);
+
       clearForm();
       setEditingPet(null);
     } else {
@@ -104,13 +118,15 @@ export default function Pets() {
         sex,
         notes,
       });
-      clearForm();
 
       console.log(data);
 
       setPets((pets) => [...pets, data]);
+
+      clearForm();
     }
   }
+
   const filteredPets = pets.filter((pet) => {
     return (
       pet.name.toLowerCase().includes(petFilter.toLowerCase()) &&
@@ -155,7 +171,11 @@ export default function Pets() {
         clearFilters={clearFilters}
       />
 
-      <PetList filteredPets={filteredPets} onEdit={handleEditPet} />
+      <PetList
+        filteredPets={filteredPets}
+        onEdit={handleEditPet}
+        onDelete={handleDeletePet}
+      />
     </>
   );
 }
