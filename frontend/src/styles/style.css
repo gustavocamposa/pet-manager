@@ -17,6 +17,7 @@
 
   --danger: #d3564a;
   --danger-dark: #b8443a;
+  --danger-light: #fbeceb;
 
   --radius-lg: 18px;
   --radius-md: 12px;
@@ -46,7 +47,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-#root {
+.app {
   max-width: 760px;
   margin: 0 auto;
   padding: 48px 24px 96px;
@@ -55,7 +56,7 @@ body {
   gap: 28px;
 }
 
-#root > h1:first-of-type {
+.app-title {
   font-family: var(--font-heading);
   font-size: clamp(2rem, 5vw, 2.75rem);
   font-weight: 700;
@@ -63,44 +64,27 @@ body {
   text-align: center;
   margin: 0 0 8px;
   letter-spacing: -0.02em;
-  position: relative;
 }
 
-#root > h1:first-of-type::after {
+.app-title::after {
+  content: "🐾";
   display: block;
   font-size: 1rem;
   margin-top: 6px;
-  filter: grayscale(0.1);
 }
 
-#root > h1:nth-of-type(2) {
-  font-family: var(--font-heading);
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--text);
-  margin: 12px 0 -8px;
-  padding-bottom: 8px;
-  border-bottom: 2px solid var(--border);
-}
-
-form {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
-  padding: 28px;
+.field {
   display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  transition: box-shadow 0.25s ease;
+  flex-direction: column;
+  gap: 4px;
 }
 
-form:hover {
-  box-shadow: var(--shadow-hover);
+.field-wide {
+  grid-column: 1 / -1;
 }
 
-input,
-textarea {
+.input {
+  width: 100%;
   font-family: var(--font-body);
   font-size: 0.95rem;
   color: var(--text);
@@ -112,33 +96,54 @@ textarea {
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
-input::placeholder,
-textarea::placeholder {
+.input::placeholder {
   color: var(--text-muted);
 }
 
-input:hover,
-textarea:hover {
+.input:hover {
   border-color: #c7d8d1;
 }
 
-input:focus,
-textarea:focus,
-input:focus-visible,
-textarea:focus-visible {
+.input:focus,
+.input:focus-visible {
   border-color: var(--primary);
   background: #ffffff;
   box-shadow: 0 0 0 3px var(--primary-light);
 }
 
-textarea {
-  width: 100%;
-  min-height: 90px;
-  resize: vertical;
-  font-family: var(--font-body);
+.input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
-button {
+.input-error {
+  border-color: var(--danger);
+}
+
+.input-error:focus {
+  box-shadow: 0 0 0 3px var(--danger-light);
+}
+
+.field-error {
+  font-size: 0.8rem;
+  color: var(--danger-dark);
+}
+
+.form-error {
+  margin: 0;
+  padding: 10px 14px;
+  background: var(--danger-light);
+  color: var(--danger-dark);
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+}
+
+textarea.input {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.btn {
   font-family: var(--font-heading);
   font-weight: 600;
   font-size: 0.95rem;
@@ -147,74 +152,191 @@ button {
   border-radius: var(--radius-sm);
   padding: 11px 22px;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease,
+    opacity 0.2s ease;
 }
 
-button:active {
+.btn:active {
   transform: translateY(1px) scale(0.98);
 }
 
-button:focus-visible {
+.btn:focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: 2px;
 }
 
-#root > form:first-of-type {
-  max-width: 380px;
-  margin: 0 auto;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 12px;
-  padding: 32px;
+.btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
 }
 
-#root > form:first-of-type input {
-  padding: 12px 14px;
-}
-
-#root > form:first-of-type button {
-  margin-top: 6px;
+.btn-primary {
   background: var(--primary);
   color: #fff;
-  padding: 12px 22px;
   box-shadow: 0 4px 12px rgba(47, 111, 94, 0.25);
 }
 
-#root > form:first-of-type button:hover {
+.btn-primary:hover:not(:disabled) {
   background: var(--primary-dark);
   box-shadow: 0 6px 16px rgba(47, 111, 94, 0.32);
 }
 
-#root > form:nth-of-type(2) {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-  align-items: start;
-}
-
-#root > form:nth-of-type(2) input {
-  width: 100%;
-}
-
-#root > form:nth-of-type(2) textarea {
-  grid-column: 1 / -1;
-}
-
-#root > form:nth-of-type(2) button {
-  grid-column: 1 / -1;
-  justify-self: start;
+.btn-accent {
   background: var(--accent);
-  color: #ffffff;
-  padding: 12px 28px;
+  color: #fff;
   box-shadow: 0 4px 12px rgba(242, 163, 65, 0.3);
 }
 
-#root > form:nth-of-type(2) button:hover {
+.btn-accent:hover:not(:disabled) {
   background: var(--accent-dark);
   box-shadow: 0 6px 16px rgba(242, 163, 65, 0.38);
 }
 
-#root > div:nth-of-type(1) {
+.btn-outline {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1.5px solid var(--border);
+}
+
+.btn-outline:hover:not(:disabled) {
+  border-color: var(--text-muted);
+  color: var(--text);
+}
+
+.btn-outline-danger {
+  background: transparent;
+  color: var(--danger);
+  border: 1.5px solid var(--danger);
+  padding: 9px 18px;
+  font-size: 0.85rem;
+}
+
+.btn-outline-danger:hover:not(:disabled) {
+  background: var(--danger);
+  color: #fff;
+}
+
+.btn-link {
+  background: transparent;
+  color: var(--text-muted);
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  text-decoration: underline;
+}
+
+.btn-link:hover:not(:disabled) {
+  color: var(--primary-dark);
+}
+
+.btn-small {
+  padding: 7px 16px;
+  font-size: 0.82rem;
+}
+
+.btn-edit {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.btn-edit:hover:not(:disabled) {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-delete {
+  background: var(--danger-light);
+  color: var(--danger-dark);
+}
+
+.btn-delete:hover:not(:disabled) {
+  background: var(--danger);
+  color: #fff;
+}
+
+.login-page {
+  display: flex;
+  justify-content: center;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 380px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: box-shadow 0.25s ease;
+}
+
+.login-form:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+.login-form .btn-primary {
+  margin-top: 6px;
+}
+
+.pets-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 8px;
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}
+
+.loading {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  padding: 24px;
+}
+
+.error-banner {
+  margin: 0;
+  padding: 12px 16px;
+  background: var(--danger-light);
+  color: var(--danger-dark);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+}
+
+.pet-form {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 28px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  align-items: start;
+  transition: box-shadow 0.25s ease;
+}
+
+.pet-form:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+.pet-form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 10px;
+}
+
+.filters {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -226,82 +348,65 @@ button:focus-visible {
   align-items: center;
 }
 
-#root > div:nth-of-type(1) input {
+.filters .input {
   flex: 1 1 150px;
   padding: 9px 12px;
   font-size: 0.9rem;
 }
 
-#root > div:nth-of-type(1) button {
-  background: transparent;
-  color: var(--danger);
-  border: 1.5px solid var(--danger);
-  padding: 9px 18px;
-  font-size: 0.85rem;
-}
-
-#root > div:nth-of-type(1) button:hover {
-  background: var(--danger);
-  color: #fff;
-}
-
-#root > div:nth-of-type(2) {
+.pet-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   gap: 16px;
 }
-#root > div:nth-of-type(2) > div {
+
+.pet-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-left: 5px solid var(--primary);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow);
   padding: 18px 20px;
-  font-size: 0.92rem;
-  color: var(--text);
-  line-height: 1.7;
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
-#root > div:nth-of-type(2) > div:hover {
+.pet-card:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-hover);
 }
 
-#root > div:nth-of-type(2) > div br {
-  content: "";
-  display: block;
-  margin-top: 3px;
-}
-
-#root > div:nth-of-type(2) > div button:first-of-type {
-  margin-top: 10px;
-  background: var(--primary-light);
+.pet-card-name {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 600;
   color: var(--primary-dark);
-  padding: 7px 16px;
-  font-size: 0.82rem;
+  margin: 0 0 8px;
 }
 
-#root > div:nth-of-type(2) > div button:first-of-type:hover {
-  background: var(--primary);
-  color: #fff;
+.pet-field {
+  margin: 0 0 4px;
+  font-size: 0.9rem;
+  color: var(--text);
 }
 
-#root > div:nth-of-type(2) > div button:last-of-type {
-  margin-top: 10px;
-  margin-left: 8px;
-  background: #fbeceb;
-  color: var(--danger-dark);
-  padding: 7px 16px;
-  font-size: 0.82rem;
+.pet-field-label {
+  font-weight: 600;
+  color: var(--text-muted);
 }
 
-#root > div:nth-of-type(2) > div button:last-of-type:hover {
-  background: var(--danger);
-  color: #fff;
+.pet-notes {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border);
 }
 
-#root > p {
+.pet-card-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.empty-state {
   text-align: center;
   color: var(--text-muted);
   font-size: 0.95rem;
@@ -312,15 +417,15 @@ button:focus-visible {
 }
 
 @media (max-width: 560px) {
-  #root {
+  .app {
     padding: 32px 16px 72px;
   }
 
-  #root > form:nth-of-type(2) {
+  .pet-form {
     grid-template-columns: 1fr;
   }
 
-  #root > div:nth-of-type(2) {
+  .pet-list {
     grid-template-columns: 1fr;
   }
 }

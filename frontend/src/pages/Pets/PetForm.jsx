@@ -15,60 +15,115 @@ export default function PetForm({
   setNotes,
   handleAddPet,
   editingPet,
+  onCancelEdit,
+  errors = {},
+  isSaving = false,
 }) {
   return (
-    <form onSubmit={handleAddPet}>
-      <input
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Pet name..."
-      />
+    <form className="pet-form" onSubmit={handleAddPet} noValidate>
+      <div className="field">
+        <input
+          type="text"
+          className={`input ${errors.name ? "input-error" : ""}`}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Pet name..."
+          disabled={isSaving}
+        />
+        {errors.name && <span className="field-error">{errors.name}</span>}
+      </div>
 
-      <input
-        type="text"
-        value={species}
-        onChange={(e) => setSpecies(e.target.value)}
-        placeholder="Species..."
-      />
+      <div className="field">
+        <input
+          type="text"
+          className={`input ${errors.species ? "input-error" : ""}`}
+          value={species}
+          onChange={(e) => setSpecies(e.target.value)}
+          placeholder="Species..."
+          disabled={isSaving}
+        />
+        {errors.species && (
+          <span className="field-error">{errors.species}</span>
+        )}
+      </div>
 
-      <input
-        type="text"
-        value={breed}
-        onChange={(e) => setBreed(e.target.value)}
-        placeholder="Breed..."
-      />
+      <div className="field">
+        <input
+          type="text"
+          className={`input ${errors.breed ? "input-error" : ""}`}
+          value={breed}
+          onChange={(e) => setBreed(e.target.value)}
+          placeholder="Breed..."
+          disabled={isSaving}
+        />
+        {errors.breed && <span className="field-error">{errors.breed}</span>}
+      </div>
 
-      <input
-        type="number"
-        value={age}
-        onChange={(e) => setAge(Number(e.target.value))}
-        placeholder="Age..."
-      />
+      <div className="field">
+        <input
+          type="number"
+          className={`input ${errors.age ? "input-error" : ""}`}
+          value={age}
+          onChange={(e) => setAge(e.target.value)}
+          placeholder="Age..."
+          min="0"
+          disabled={isSaving}
+        />
+        {errors.age && <span className="field-error">{errors.age}</span>}
+      </div>
 
-      <input
-        type="number"
-        value={weight}
-        onChange={(e) => setWeight(Number(e.target.value))}
-        placeholder="Weight..."
-      />
+      <div className="field">
+        <input
+          type="number"
+          className={`input ${errors.weight ? "input-error" : ""}`}
+          value={weight}
+          onChange={(e) => setWeight(e.target.value)}
+          placeholder="Weight..."
+          min="0"
+          step="0.1"
+          disabled={isSaving}
+        />
+        {errors.weight && <span className="field-error">{errors.weight}</span>}
+      </div>
 
-      <input
-        type="text"
-        value={sex}
-        onChange={(e) => setSex(e.target.value)}
-        placeholder="Sex..."
-      />
+      <div className="field">
+        <input
+          type="text"
+          className={`input ${errors.sex ? "input-error" : ""}`}
+          value={sex}
+          onChange={(e) => setSex(e.target.value)}
+          placeholder="Sex..."
+          disabled={isSaving}
+        />
+        {errors.sex && <span className="field-error">{errors.sex}</span>}
+      </div>
 
-      <textarea
-        value={notes}
-        onChange={(e) => setNotes(e.target.value)}
-        placeholder="Notes..."
-      />
+      <div className="field field-wide">
+        <textarea
+          className="input"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          placeholder="Notes..."
+          disabled={isSaving}
+        />
+      </div>
 
-      <button type="submit">
-        {editingPet ? "Update Pet" : "Add Pet"}
-      </button>
+      <div className="pet-form-actions">
+        <button type="submit" className="btn btn-accent" disabled={isSaving}>
+          {isSaving ? "Saving..." : editingPet ? "Update Pet" : "Add Pet"}
+        </button>
+
+        {editingPet && (
+          <button
+            type="button"
+            className="btn btn-outline"
+            onClick={onCancelEdit}
+            disabled={isSaving}
+          >
+            Cancel
+          </button>
+        )}
+      </div>
     </form>
   );
 }

@@ -1,15 +1,37 @@
+import { useEffect, useState } from "react";
+
 import Login from "./pages/Login/Login.jsx";
 import Pets from "./pages/Pets/Pets.jsx";
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  function handleLoginSuccess() {
+    setIsAuthenticated(true);
+  }
+
+  function handleLogout() {
+    localStorage.removeItem("token");
+    setIsAuthenticated(false);
+  }
+
   return (
-    <>
-      <h1>Pet Application</h1>
+    <div className="app">
+      <h1 className="app-title">Pet Application</h1>
 
-      <Login />
-
-      <Pets />
-    </>
+      {isAuthenticated ? (
+        <Pets onLogout={handleLogout} />
+      ) : (
+        <Login onLoginSuccess={handleLoginSuccess} />
+      )}
+    </div>
   );
 }
 
