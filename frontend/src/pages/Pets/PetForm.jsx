@@ -14,6 +14,7 @@ export default function PetForm({
   notes,
   setNotes,
   handleAddPet,
+  editingPet,
 }) {
   return (
     <form onSubmit={handleAddPet}>
@@ -65,7 +66,9 @@ export default function PetForm({
         placeholder="Notes..."
       />
 
-      <button type="submit">Add Pet</button>
+      <button type="submit">
+        {editingPet ? "Update Pet" : "Add Pet"}
+      </button>
     </form>
   );
 }

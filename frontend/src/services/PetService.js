@@ -32,3 +32,20 @@ export async function addPet(pet) {
 
   return data;
 }
+
+export async function updatePet(id, pet) {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+    body: JSON.stringify(pet),
+  });
+
+  const data = await response.json();
+
+  return data;
+}

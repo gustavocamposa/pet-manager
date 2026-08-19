@@ -1,4 +1,4 @@
-export default function PetList({ filteredPets }) {
+export default function PetList({ filteredPets, onEdit }) {
   if (filteredPets.length === 0) {
     return <p>No pets found.</p>;
   }
@@ -14,6 +14,7 @@ export default function PetList({ filteredPets }) {
           {pet.weight} <br />
           {pet.sex} <br />
           {pet.notes} <br />
+          <button onClick={() => onEdit(pet)}>Edit</button>{" "}
         </div>
       ))}
     </div>

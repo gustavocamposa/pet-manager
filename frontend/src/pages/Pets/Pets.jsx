@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 
-import { getPets, addPet } from "../../services/petService";
 import PetForm from "./PetForm";
 import PetFilters from "./PetFilters";
 import PetList from "./PetList";
+
+import { getPets, addPet, updatePet } from "../../services/petService";
 
 export default function Pets() {
   const [pets, setPets] = useState([]);
@@ -21,6 +22,8 @@ export default function Pets() {
   const [sex, setSex] = useState("");
   const [notes, setNotes] = useState("");
 
+  const [editingPet, setEditingPet] = useState(null);
+
   useEffect(() => {
     async function search() {
       const result = await getPets();
@@ -30,6 +33,20 @@ export default function Pets() {
 
     search();
   }, []);
+
+  // Quando selecionar um pet para editar,
+  // preenche o formulário com os dados dele
+  useEffect(() => {
+    if (editingPet) {
+      setName(editingPet.name);
+      setSpecies(editingPet.species);
+      setBreed(editingPet.breed);
+      setAge(editingPet.age);
+      setWeight(editingPet.weight);
+      setSex(editingPet.sex);
+      setNotes(editingPet.notes);
+    }
+  }, [editingPet]);
 
   function clearFilters() {
     setPetFilter("");
@@ -48,26 +65,52 @@ export default function Pets() {
     setNotes("");
   }
 
+  function handleEditPet(pet) {
+    setEditingPet(pet);
+  }
+
   async function handleAddPet(event) {
     event.preventDefault();
 
-    const data = await addPet({
-      name,
-      species,
-      breed,
-      age,
-      weight,
-      sex,
-      notes,
-    });
+    if (editingPet) {
+      const data = await updatePet(editingPet.id, {
+        name,
+        species,
+        breed,
+        age,
+        weight,
+        sex,
+        notes,
+      });
+      setPets((pets) =>
+        pets.map((pet) => {
+          if (pet.id === editingPet.id) {
+            return data;
+          }
+          return pet;
+        }),
+      );
 
-    console.log(data);
+      console.log(data);
+      clearForm();
+      setEditingPet(null);
+    } else {
+      const data = await addPet({
+        name,
+        species,
+        breed,
+        age,
+        weight,
+        sex,
+        notes,
+      });
+      clearForm();
 
-    setPets((pets) => [...pets, data]);
+      console.log(data);
 
-    clearForm();
+      setPets((pets) => [...pets, data]);
+    }
   }
-
   const filteredPets = pets.filter((pet) => {
     return (
       pet.name.toLowerCase().includes(petFilter.toLowerCase()) &&
@@ -97,6 +140,7 @@ export default function Pets() {
         notes={notes}
         setNotes={setNotes}
         handleAddPet={handleAddPet}
+        editingPet={editingPet}
       />
 
       <PetFilters
@@ -111,7 +155,7 @@ export default function Pets() {
         clearFilters={clearFilters}
       />
 
-      <PetList filteredPets={filteredPets} />
+      <PetList filteredPets={filteredPets} onEdit={handleEditPet} />
     </>
   );
 }
