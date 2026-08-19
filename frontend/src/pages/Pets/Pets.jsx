@@ -20,6 +20,8 @@ export default function Pets() {
   const [pets, setPets] = useState([]);
   const [petFilter, setPetFilter] = useState("");
   const [speciesFilter, setSpeciesFilter] = useState("");
+  const [breedFilter, setBreedFilter] = useState("");
+  const [sexFilter, setSexFilter] = useState("");
 
   useEffect(() => {
     async function search() {
@@ -30,6 +32,13 @@ export default function Pets() {
 
     search();
   }, []);
+
+  function clearFilters() {
+    setPetFilter("");
+    setSpeciesFilter("");
+    setBreedFilter("");
+    setSexFilter("");
+  }
 
   return (
     <>
@@ -46,13 +55,29 @@ export default function Pets() {
         onChange={(e) => setSpeciesFilter(e.target.value)}
         placeholder="Search species..."
       />
+      <input
+        type="text"
+        value={breedFilter}
+        onChange={(e) => setBreedFilter(e.target.value)}
+        placeholder="Search breeds..."
+      />
+      <input
+        type="text"
+        value={sexFilter}
+        onChange={(e) => setSexFilter(e.target.value)}
+        placeholder="Search sex..."
+      />
+
+      <button onClick={clearFilters}>Clear Filters</button>
 
       <div>
         {pets
           .filter((pet) => {
             return (
               pet.name.toLowerCase().includes(petFilter.toLowerCase()) &&
-              pet.species.toLowerCase().includes(speciesFilter.toLowerCase())
+              pet.species.toLowerCase().includes(speciesFilter.toLowerCase()) &&
+              pet.breed.toLowerCase().includes(breedFilter.toLowerCase()) &&
+              pet.sex.toLowerCase().includes(sexFilter.toLowerCase())
             );
           })
           .map((pet) => (
