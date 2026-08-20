@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&display=swap");
 
 :root {
   --bg: #f6faf8;
@@ -26,7 +26,7 @@
   --shadow: 0 4px 16px rgba(31, 42, 38, 0.06);
   --shadow-hover: 0 8px 24px rgba(31, 42, 38, 0.1);
 
-  --font-heading: "Fredoka", sans-serif;
+  --font-heading: "Sora", sans-serif;
   --font-body: "Inter", sans-serif;
 }
 
@@ -67,7 +67,6 @@ body {
 }
 
 .app-title::after {
-  content: "🐾";
   display: block;
   font-size: 1rem;
   margin-top: 6px;
@@ -259,7 +258,8 @@ textarea.input {
   justify-content: center;
 }
 
-.login-form {
+.login-form,
+.register-form {
   width: 100%;
   max-width: 380px;
   background: var(--surface);
@@ -273,12 +273,44 @@ textarea.input {
   transition: box-shadow 0.25s ease;
 }
 
-.login-form:hover {
+.login-form:hover,
+.register-form:hover {
   box-shadow: var(--shadow-hover);
 }
 
 .login-form .btn-primary {
   margin-top: 6px;
+}
+
+.register-page {
+  display: flex;
+  justify-content: center;
+}
+
+.register-form .section-title {
+  text-align: center;
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 4px;
+}
+
+.register-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.register-actions .btn {
+  flex: 1;
+}
+
+.form-success {
+  margin: 0;
+  padding: 10px 14px;
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
 }
 
 .pets-header {

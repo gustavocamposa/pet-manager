@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const LOGIN_URL = "http://localhost:3000/login";
 
-export default function Login({ onLoginSuccess }) {
+export default function Login({ onLoginSuccess, onRegister }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -100,6 +100,9 @@ export default function Login({ onLoginSuccess }) {
 
         <button className="btn btn-primary" disabled={isSubmitting}>
           {isSubmitting ? "Signing in..." : "Enter"}
+        </button>
+        <button type="button" className="btn btn-outline" onClick={onRegister}>
+          Create account
         </button>
       </form>
     </div>
