@@ -19,11 +19,11 @@ async function login(req, res) {
     return user.email === email;
   });
   if (!user) {
-    return res.status(404).json({ error: "Usuário não encontrado" });
+    return res.status(404).json({ error: "User not found" });
   }
   const result = await bcrypt.compare(password, user.password);
   if (result == false) {
-    return res.status(401).json({ error: "Senha inválida." });
+    return res.status(401).json({ error: "Invalid password." });
   }
 }
 
@@ -50,6 +50,32 @@ async function addUser(req, res) {
 
   const { name, email, password, phone, address } = req.body;
 
+  const existingUser = db.users.find((user) => {
+    return user.email.toLowerCase() === email.toLowerCase();
+  });
+
+  if (existingUser) {
+    return res
+      .status(409)
+      .json({ error: "This email has already been registered." });
+  }
+
+  if (!phone || !phone.trim()) {
+    return res.status(400).json({ error: "Phone is required." });
+  }
+
+  if (!/^\d{8,15}$/.test(phone.trim())) {
+    return res.status(400).json({ error: "Please, put a valid number." });
+  }
+
+  if (!address || !address.trim()) {
+    return res.status(400).json({ error: "Please, put the adress." });
+  }
+
+  if (/^\d+$/.test(address.trim())) {
+    return res.status(400).json({ error: "Invalid address." });
+  }
+
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const user = {
@@ -65,7 +91,9 @@ async function addUser(req, res) {
 
   await writeDataBase(db);
 
-  return res.status(201).json(user);
+  const { password: _password, ...userWithoutPassword } = user;
+
+  return res.status(201).json(userWithoutPassword);
 }
 async function updateUser(req, res) {
   const db = await readDataBase();
@@ -76,7 +104,7 @@ async function updateUser(req, res) {
   });
 
   if (!user) {
-    return res.status(404).json({ error: "Usuário não encontrado" });
+    return res.status(404).json({ error: "User not found" });
   }
 
   const data = req.body;
@@ -121,4 +149,4 @@ async function deleteUser(req, res) {
     message: "User deleted successfully",
   });
 }
-export { getUsers, getUsersById, addUser, updateUser, deleteUser };
+export { getUsers, getUsersById, addUser, updateUser, deleteUser, login };

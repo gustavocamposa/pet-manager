@@ -13,7 +13,7 @@ async function login(req, res) {
 
   if (!user) {
     return res.status(404).json({
-      error: "Usuário não encontrado",
+      error: "User not found",
     });
   }
 
@@ -21,7 +21,7 @@ async function login(req, res) {
 
   if (!result) {
     return res.status(401).json({
-      error: "Senha errada",
+      error: "Wrong password.",
     });
   }
 
@@ -34,7 +34,7 @@ async function login(req, res) {
   );
 
   return res.status(200).json({
-    message: "Login realizado com sucesso",
+    message: "Login successful",
     token: token,
   });
 }

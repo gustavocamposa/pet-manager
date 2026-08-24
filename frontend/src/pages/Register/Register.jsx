@@ -5,6 +5,8 @@ export default function Register({ onBackToLogin }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
 
   const [errors, setErrors] = useState({});
   const [error, setError] = useState("");
@@ -30,6 +32,18 @@ export default function Register({ onBackToLogin }) {
       newErrors.password = "Password must be at least 6 characters.";
     }
 
+    if (!phone.trim()) {
+      newErrors.phone = "Please enter your phone number.";
+    } else if (!/^\d{8,15}$/.test(phone.trim())) {
+      newErrors.phone = "Phone must contain only digits (8 to 15 numbers).";
+    }
+
+    if (!address.trim()) {
+      newErrors.address = "Please enter your address.";
+    } else if (/^\d+$/.test(address.trim())) {
+      newErrors.address = "Please enter a valid address (not just numbers).";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }
@@ -51,6 +65,8 @@ export default function Register({ onBackToLogin }) {
         name: name.trim(),
         email: email.trim(),
         password,
+        phone: phone.trim(),
+        address: address.trim(),
       });
 
       console.log(data);
@@ -60,6 +76,8 @@ export default function Register({ onBackToLogin }) {
       setName("");
       setEmail("");
       setPassword("");
+      setPhone("");
+      setAddress("");
       setErrors({});
     } catch (error) {
       console.error(error);
@@ -113,6 +131,32 @@ export default function Register({ onBackToLogin }) {
           />
           {errors.password && (
             <span className="field-error">{errors.password}</span>
+          )}
+        </div>
+
+        <div className="field">
+          <input
+            type="tel"
+            className={`input ${errors.phone ? "input-error" : ""}`}
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder="Phone"
+            disabled={isSubmitting}
+          />
+          {errors.phone && <span className="field-error">{errors.phone}</span>}
+        </div>
+
+        <div className="field">
+          <input
+            type="text"
+            className={`input ${errors.address ? "input-error" : ""}`}
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            placeholder="Address"
+            disabled={isSubmitting}
+          />
+          {errors.address && (
+            <span className="field-error">{errors.address}</span>
           )}
         </div>
 

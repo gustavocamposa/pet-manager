@@ -16,7 +16,7 @@ export async function registerUser(user) {
   const data = await response.json().catch(() => null);
 
   if (!response.ok) {
-    throw new Error(data?.message || "Could not register user.");
+    throw new Error(data?.error || data?.message || "Could not register user.");
   }
 
   return data;

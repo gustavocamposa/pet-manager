@@ -5,7 +5,7 @@ function authMiddleware(req, res, next) {
 
   if (!auth) {
     return res.status(401).json({
-      message: "Token não informado",
+      message: "Token not received.",
     });
   }
 
@@ -20,7 +20,7 @@ function authMiddleware(req, res, next) {
     next();
   } catch (error) {
     return res.status(401).json({
-      message: "Token inválido",
+      message: "Invalid Token",
     });
   }
 }
