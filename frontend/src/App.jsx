@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 
-import { Routes, Route, Link, Navigate, useNavigate } from "react-router-dom";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
 
 import Login from "./pages/Login/Login.jsx";
 import Pets from "./pages/Pets/Pets.jsx";
 import Register from "./pages/Register/Register.jsx";
+
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import GuestRoute from "./components/GuestRoute.jsx";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -19,14 +22,14 @@ function App() {
     }
   }, []);
 
+  function handleLoginSuccess() {
+    setIsAuthenticated(true);
+  }
+
   function handleLogout() {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
     navigate("/login");
-  }
-
-  function handleLoginSuccess() {
-    setIsAuthenticated(true);
   }
 
   return (
@@ -42,20 +45,29 @@ function App() {
         <Route
           path="/"
           element={
-            isAuthenticated ? (
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
               <Pets onLogout={handleLogout} />
-            ) : (
-              <Navigate to="/login" />
-            )
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/login"
-          element={<Login onLoginSuccess={handleLoginSuccess} />}
+          element={
+            <GuestRoute isAuthenticated={isAuthenticated}>
+              <Login onLoginSuccess={handleLoginSuccess} />
+            </GuestRoute>
+          }
         />
 
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/register"
+          element={
+            <GuestRoute isAuthenticated={isAuthenticated}>
+              <Register />
+            </GuestRoute>
+          }
+        />
       </Routes>
     </div>
   );
