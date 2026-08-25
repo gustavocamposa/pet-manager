@@ -36,8 +36,9 @@ function App() {
     <div className="app">
       <h1 className="app-title">Pet Application</h1>
 
-      <nav>
-        <Link to="/">Home Page</Link> | <Link to="/login">Login</Link> |{" "}
+      <nav className="nav">
+        <Link to="/">Home Page</Link>
+        <Link to="/login">Login</Link>
         <Link to="/register">Register</Link>
       </nav>
 

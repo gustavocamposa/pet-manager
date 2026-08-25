@@ -61,6 +61,34 @@ body {
   margin: 0 0 4px;
   letter-spacing: -0.01em;
 }
+.nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.nav a {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.nav a:hover {
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+.nav a.active {
+  color: var(--primary-dark);
+  background: var(--primary-light);
+}
 
 .app-title::after {
   display: block;
