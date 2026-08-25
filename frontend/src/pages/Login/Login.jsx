@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const LOGIN_URL = "http://localhost:3000/login";
 
@@ -9,6 +10,7 @@ export default function Login({ onLoginSuccess, onRegister }) {
   const [errors, setErrors] = useState({});
   const [formError, setFormError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   function validate() {
     const newErrors = {};
@@ -56,6 +58,7 @@ export default function Login({ onLoginSuccess, onRegister }) {
 
       localStorage.setItem("token", data.token);
       onLoginSuccess?.();
+      navigate("/");
     } catch (error) {
       setFormError(
         error.message === "Failed to fetch"
@@ -101,7 +104,11 @@ export default function Login({ onLoginSuccess, onRegister }) {
         <button className="btn btn-primary" disabled={isSubmitting}>
           {isSubmitting ? "Signing in..." : "Enter"}
         </button>
-        <button type="button" className="btn btn-outline" onClick={onRegister}>
+        <button
+          type="button"
+          className="btn btn-outline"
+          navigate={"/register"}
+        >
           Create account
         </button>
       </form>
