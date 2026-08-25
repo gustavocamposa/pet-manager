@@ -89,6 +89,23 @@ body {
   color: var(--primary-dark);
   background: var(--primary-light);
 }
+.nav-logout {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--danger-dark);
+  background: transparent;
+  border: none;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.nav-logout:hover {
+  color: var(--danger);
+  background: var(--danger-light);
+}
 
 .app-title::after {
   display: block;

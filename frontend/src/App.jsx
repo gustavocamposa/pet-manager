@@ -38,8 +38,17 @@ function App() {
 
       <nav className="nav">
         <Link to="/">Home Page</Link>
-        <Link to="/login">Login</Link>
-        <Link to="/register">Register</Link>
+
+        {isAuthenticated ? (
+          <button type="button" className="nav-logout" onClick={handleLogout}>
+            Logout
+          </button>
+        ) : (
+          <>
+            <Link to="/login">Login</Link>
+            <Link to="/register">Register</Link>
+          </>
+        )}
       </nav>
 
       <Routes>
