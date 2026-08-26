@@ -5,9 +5,8 @@ import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import Login from "./pages/Login/Login.jsx";
 import Pets from "./pages/Pets/Pets.jsx";
 import Register from "./pages/Register/Register.jsx";
-
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import GuestRoute from "./components/GuestRoute.jsx";
+import ProtectedRoute from "./components/ProtectedRoute";
+import GuestRoute from "./components/GuestRoute";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
