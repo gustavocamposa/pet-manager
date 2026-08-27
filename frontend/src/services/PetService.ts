@@ -27,8 +27,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
   }
 
   if (!response.ok) {
-    let message =
-      (data as { message?: string } | null)?.message;
+    let message = (data as { message?: string } | null)?.message;
 
     if (!message) {
       if (response.status === 401) {
@@ -63,8 +62,6 @@ async function request<T>(
     const error: ApiError = new Error(
       "Could not connect to the server. Check your connection and try again.",
     );
-
-    error.status = undefined;
 
     throw error;
   }

@@ -1,15 +1,5 @@
 import type { Dispatch, SetStateAction, SubmitEvent } from "react";
-
-type Pet = {
-  id: string;
-  name: string;
-  species: string;
-  breed: string;
-  age: number;
-  weight: number;
-  sex: string;
-  notes: string;
-};
+import type { Pet } from "../../types/Pet";
 
 type PetFormErrors = {
   name?: string;

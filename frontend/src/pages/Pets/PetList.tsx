@@ -1,13 +1,4 @@
-type Pet = {
-  id: string;
-  name: string;
-  species: string;
-  breed: string;
-  age: number;
-  weight: number;
-  sex: string;
-  notes: string;
-};
+import type { Pet } from "../../types/Pet";
 
 type PetListProps = {
   filteredPets: Pet[];
