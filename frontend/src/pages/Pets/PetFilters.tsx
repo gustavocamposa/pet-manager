@@ -1,3 +1,19 @@
+type PetFiltersProps = {
+  petFilter: string;
+  setPetFilter: (value: string) => void;
+
+  speciesFilter: string;
+  setSpeciesFilter: (value: string) => void;
+
+  breedFilter: string;
+  setBreedFilter: (value: string) => void;
+
+  sexFilter: string;
+  setSexFilter: (value: string) => void;
+
+  clearFilters: () => void;
+};
+
 export default function PetFilters({
   petFilter,
   setPetFilter,
@@ -8,7 +24,7 @@ export default function PetFilters({
   sexFilter,
   setSexFilter,
   clearFilters,
-}) {
+}: PetFiltersProps) {
   return (
     <div className="filters">
       <input

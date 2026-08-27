@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import type { SubmitEvent } from "react";
 
 import PetForm from "./PetForm";
 import PetFilters from "./PetFilters";
@@ -11,8 +12,33 @@ import {
   deletePet,
 } from "../../services/petService";
 
-export default function Pets({ onLogout }) {
-  const [pets, setPets] = useState([]);
+type Pet = {
+  id: string;
+  name: string;
+  species: string;
+  breed: string;
+  age: number;
+  weight: number;
+  sex: string;
+  notes: string;
+};
+
+type PetFormErrors = {
+  name?: string;
+  species?: string;
+  breed?: string;
+  age?: string;
+  weight?: string;
+  sex?: string;
+};
+
+type PetsProps = {
+  onLogout: () => void;
+};
+
+export default function Pets({ onLogout }: PetsProps) {
+  const [pets, setPets] = useState<Pet[]>([]);
+
   const [isLoadingPets, setIsLoadingPets] = useState(true);
   const [loadError, setLoadError] = useState("");
 
@@ -28,13 +54,15 @@ export default function Pets({ onLogout }) {
   const [weight, setWeight] = useState("");
   const [sex, setSex] = useState("");
   const [notes, setNotes] = useState("");
-  const [formErrors, setFormErrors] = useState({});
 
-  const [editingPet, setEditingPet] = useState(null);
+  const [formErrors, setFormErrors] = useState<PetFormErrors>({});
+
+  const [editingPet, setEditingPet] = useState<Pet | null>(null);
+
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState("");
 
-  const [deletingId, setDeletingId] = useState(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState("");
 
   useEffect(() => {
@@ -46,11 +74,11 @@ export default function Pets({ onLogout }) {
         const result = await getPets();
         setPets(result);
       } catch (error) {
-        if (error.status === 401) {
-          onLogout?.();
-          return;
+        if (error instanceof Error) {
+          setLoadError(error.message);
+        } else {
+          setLoadError("Could not load pets.");
         }
-        setLoadError(error.message);
       } finally {
         setIsLoadingPets(false);
       }
@@ -90,7 +118,7 @@ export default function Pets({ onLogout }) {
     setFormErrors({});
   }
 
-  function handleEditPet(pet) {
+  function handleEditPet(pet: Pet) {
     setSaveError("");
     setEditingPet(pet);
   }
@@ -100,7 +128,7 @@ export default function Pets({ onLogout }) {
     clearForm();
   }
 
-  async function handleDeletePet(pet) {
+  async function handleDeletePet(pet: Pet) {
     const confirmed = window.confirm(
       `Are you sure you want to delete "${pet.name}"? This action cannot be undone.`,
     );
@@ -114,46 +142,68 @@ export default function Pets({ onLogout }) {
 
     try {
       await deletePet(pet.id);
-      setPets((pets) => pets.filter((item) => item.id !== pet.id));
 
-      // If the deleted pet was mid-edit, drop out of edit mode.
+      setPets((pets) =>
+        pets.filter((item) => item.id !== pet.id),
+      );
+
       if (editingPet?.id === pet.id) {
         handleCancelEdit();
       }
     } catch (error) {
-      if (error.status === 401) {
-        onLogout?.();
-        return;
+      if (error instanceof Error) {
+        setDeleteError(error.message);
+      } else {
+        setDeleteError("Could not delete pet.");
       }
-      setDeleteError(error.message);
     } finally {
       setDeletingId(null);
     }
   }
 
   function validatePetForm() {
-    const errors = {};
+    const errors: PetFormErrors = {};
 
-    if (!name.trim()) errors.name = "Please enter the pet's name.";
-    if (!species.trim()) errors.species = "Please enter the species.";
-    if (!breed.trim()) errors.breed = "Please enter the breed.";
+    if (!name.trim()) {
+      errors.name = "Please enter the pet's name.";
+    }
 
-    if (age === "" || Number.isNaN(Number(age)) || Number(age) <= 0) {
+    if (!species.trim()) {
+      errors.species = "Please enter the species.";
+    }
+
+    if (!breed.trim()) {
+      errors.breed = "Please enter the breed.";
+    }
+
+    if (
+      age === "" ||
+      Number.isNaN(Number(age)) ||
+      Number(age) <= 0
+    ) {
       errors.age = "Please enter a valid age.";
     }
 
-    if (weight === "" || Number.isNaN(Number(weight)) || Number(weight) <= 0) {
+    if (
+      weight === "" ||
+      Number.isNaN(Number(weight)) ||
+      Number(weight) <= 0
+    ) {
       errors.weight = "Please enter a valid weight.";
     }
 
-    if (!sex.trim()) errors.sex = "Please enter the sex.";
+    if (!sex.trim()) {
+      errors.sex = "Please enter the sex.";
+    }
 
     setFormErrors(errors);
+
     return Object.keys(errors).length === 0;
   }
 
-  async function handleAddPet(event) {
+  async function handleAddPet(event: SubmitEvent) {
     event.preventDefault();
+
     setSaveError("");
 
     if (!validatePetForm()) {
@@ -177,21 +227,25 @@ export default function Pets({ onLogout }) {
         const data = await updatePet(editingPet.id, payload);
 
         setPets((pets) =>
-          pets.map((pet) => (pet.id === editingPet.id ? data : pet)),
+          pets.map((pet) =>
+            pet.id === editingPet.id ? data : pet,
+          ),
         );
+
         setEditingPet(null);
       } else {
         const data = await addPet(payload);
+
         setPets((pets) => [...pets, data]);
       }
 
       clearForm();
     } catch (error) {
-      if (error.status === 401) {
-        onLogout?.();
-        return;
+      if (error instanceof Error) {
+        setSaveError(error.message);
+      } else {
+        setSaveError("Could not save pet.");
       }
-      setSaveError(error.message);
     } finally {
       setIsSaving(false);
     }
@@ -200,8 +254,12 @@ export default function Pets({ onLogout }) {
   const filteredPets = pets.filter((pet) => {
     return (
       pet.name.toLowerCase().includes(petFilter.toLowerCase()) &&
-      pet.species.toLowerCase().includes(speciesFilter.toLowerCase()) &&
-      pet.breed.toLowerCase().includes(breedFilter.toLowerCase()) &&
+      pet.species
+        .toLowerCase()
+        .includes(speciesFilter.toLowerCase()) &&
+      pet.breed
+        .toLowerCase()
+        .includes(breedFilter.toLowerCase()) &&
       pet.sex.toLowerCase().includes(sexFilter.toLowerCase())
     );
   });
@@ -210,7 +268,12 @@ export default function Pets({ onLogout }) {
     <section className="pets-page">
       <div className="pets-header">
         <h2 className="section-title">Pets</h2>
-        <button type="button" className="btn btn-link" onClick={onLogout}>
+
+        <button
+          type="button"
+          className="btn btn-link"
+          onClick={onLogout}
+        >
           Log out
         </button>
       </div>
@@ -237,7 +300,9 @@ export default function Pets({ onLogout }) {
         isSaving={isSaving}
       />
 
-      {saveError && <p className="error-banner">{saveError}</p>}
+      {saveError && (
+        <p className="error-banner">{saveError}</p>
+      )}
 
       <PetFilters
         petFilter={petFilter}
@@ -251,7 +316,9 @@ export default function Pets({ onLogout }) {
         clearFilters={clearFilters}
       />
 
-      {deleteError && <p className="error-banner">{deleteError}</p>}
+      {deleteError && (
+        <p className="error-banner">{deleteError}</p>
+      )}
 
       {isLoadingPets ? (
         <p className="loading">Loading pets...</p>

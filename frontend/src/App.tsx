@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 
 import Login from "./pages/Login/Login";
-import Pets from "./pages/Pets/Pets.jsx";
+import Pets from "./pages/Pets/Pets";
 import Register from "./pages/Register/Register";
 
 import ProtectedRoute from "./components/ProtectedRoute";

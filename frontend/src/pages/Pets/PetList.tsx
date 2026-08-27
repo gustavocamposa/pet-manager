@@ -1,9 +1,27 @@
+type Pet = {
+  id: string;
+  name: string;
+  species: string;
+  breed: string;
+  age: number;
+  weight: number;
+  sex: string;
+  notes: string;
+};
+
+type PetListProps = {
+  filteredPets: Pet[];
+  onEdit: (pet: Pet) => void;
+  onDelete: (pet: Pet) => void;
+  deletingId: string | null;
+};
+
 export default function PetList({
   filteredPets,
   onEdit,
   onDelete,
   deletingId,
-}) {
+}: PetListProps) {
   if (filteredPets.length === 0) {
     return <p className="empty-state">No pets found.</p>;
   }

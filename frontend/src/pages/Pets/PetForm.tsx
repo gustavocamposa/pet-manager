@@ -1,3 +1,56 @@
+import type { Dispatch, SetStateAction, SubmitEvent } from "react";
+
+type Pet = {
+  id: string;
+  name: string;
+  species: string;
+  breed: string;
+  age: number;
+  weight: number;
+  sex: string;
+  notes: string;
+};
+
+type PetFormErrors = {
+  name?: string;
+  species?: string;
+  breed?: string;
+  age?: string;
+  weight?: string;
+  sex?: string;
+};
+
+type PetFormProps = {
+  name: string;
+  setName: Dispatch<SetStateAction<string>>;
+
+  species: string;
+  setSpecies: Dispatch<SetStateAction<string>>;
+
+  breed: string;
+  setBreed: Dispatch<SetStateAction<string>>;
+
+  age: string;
+  setAge: Dispatch<SetStateAction<string>>;
+
+  weight: string;
+  setWeight: Dispatch<SetStateAction<string>>;
+
+  sex: string;
+  setSex: Dispatch<SetStateAction<string>>;
+
+  notes: string;
+  setNotes: Dispatch<SetStateAction<string>>;
+
+  handleAddPet: (event: SubmitEvent) => void;
+
+  editingPet: Pet | null;
+  onCancelEdit: () => void;
+
+  errors?: PetFormErrors;
+  isSaving?: boolean;
+};
+
 export default function PetForm({
   name,
   setName,
@@ -18,7 +71,7 @@ export default function PetForm({
   onCancelEdit,
   errors = {},
   isSaving = false,
-}) {
+}: PetFormProps) {
   return (
     <form className="pet-form" onSubmit={handleAddPet} noValidate>
       <div className="field">
