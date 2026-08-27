@@ -1,6 +1,14 @@
+import type { Pet } from "../types/Pet";
+
 const API_URL = "http://localhost:3000/pets";
 
-function authHeaders() {
+type PetInput = Omit<Pet, "id">;
+
+type ApiError = Error & {
+  status?: number;
+};
+
+function authHeaders(): HeadersInit {
   const token = localStorage.getItem("token");
 
   return {
@@ -9,8 +17,8 @@ function authHeaders() {
   };
 }
 
-async function handleResponse(response) {
-  let data = null;
+async function handleResponse<T>(response: Response): Promise<T> {
+  let data: T | null = null;
 
   try {
     data = await response.json();
@@ -19,7 +27,8 @@ async function handleResponse(response) {
   }
 
   if (!response.ok) {
-    let message = data?.message;
+    let message =
+      (data as { message?: string } | null)?.message;
 
     if (!message) {
       if (response.status === 401) {
@@ -33,55 +42,64 @@ async function handleResponse(response) {
       }
     }
 
-    const error = new Error(message);
+    const error: ApiError = new Error(message);
     error.status = response.status;
+
     throw error;
   }
 
-  return data;
+  return data as T;
 }
 
-async function request(url, options) {
-  let response;
+async function request<T>(
+  url: string,
+  options: RequestInit,
+): Promise<T> {
+  let response: Response;
 
   try {
     response = await fetch(url, options);
   } catch {
-    const error = new Error(
+    const error: ApiError = new Error(
       "Could not connect to the server. Check your connection and try again.",
     );
-    error.status = null;
+
+    error.status = undefined;
+
     throw error;
   }
 
-  return handleResponse(response);
+  return handleResponse<T>(response);
 }
 
-export async function getPets() {
-  return request(API_URL, {
+export async function getPets(): Promise<Pet[]> {
+  return request<Pet[]>(API_URL, {
     method: "GET",
     headers: authHeaders(),
   });
 }
 
-export async function addPet(pet) {
-  return request(API_URL, {
+export async function addPet(pet: PetInput): Promise<Pet> {
+  return request<Pet>(API_URL, {
     method: "POST",
     headers: authHeaders(),
     body: JSON.stringify(pet),
   });
 }
 
-export async function updatePet(id, pet) {
-  return request(`${API_URL}/${id}`, {
+export async function updatePet(
+  id: string,
+  pet: PetInput,
+): Promise<Pet> {
+  return request<Pet>(`${API_URL}/${id}`, {
     method: "PUT",
     headers: authHeaders(),
     body: JSON.stringify(pet),
   });
 }
 
-export async function deletePet(id) {
-  return request(`${API_URL}/${id}`, {
+export async function deletePet(id: string): Promise<void> {
+  return request<void>(`${API_URL}/${id}`, {
     method: "DELETE",
     headers: authHeaders(),
   });

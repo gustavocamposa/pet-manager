@@ -10,7 +10,7 @@ import {
   addPet,
   updatePet,
   deletePet,
-} from "../../services/petService";
+} from "../../services/PetService";
 
 type Pet = {
   id: string;
