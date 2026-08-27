@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 
-import Login from "./pages/Login/Login.jsx";
+import Login from "./pages/Login/Login";
 import Pets from "./pages/Pets/Pets.jsx";
-import Register from "./pages/Register/Register.jsx";
+import Register from "./pages/Register/Register";
+
 import ProtectedRoute from "./components/ProtectedRoute";
 import GuestRoute from "./components/GuestRoute";
 
